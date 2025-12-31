@@ -4,6 +4,7 @@ services:
   web:
     image: my-web-page
     build: .
+    container_name: my-web-container
     ports:
       - "8081:80"
     volumes:
