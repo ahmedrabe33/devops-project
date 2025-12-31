@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'aws-agent'}
 
     environment {
         DOCKER_IMAGE = "my-web-page:latest"
