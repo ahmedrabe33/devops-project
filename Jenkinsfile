@@ -28,5 +28,14 @@ pipeline {
                 }
             }
         }
+        stage('Health Check') {
+    steps {
+        script {
+            sh 'docker ps --filter name=my-web-container'
+            sh 'curl -I http://localhost:8081'
+        }
+    }
+}
+
     }
 }
