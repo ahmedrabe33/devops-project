@@ -1,14 +1,17 @@
-pipeline{
+pipeline {
     agent any
-    enviroment {
+
+    environment {
         DOCKER_IMAGE = "my-web-page:latest"
     }
+
     stages {
         stage('checkout') {
             steps {
-                git branch : 'main' , url: https://github.com/ahmedrabe33/devops-project.git
+                git branch: 'main', url: 'https://github.com/ahmedrabe33/devops-project.git'
             }
         }
+
         stage('build Docker Image') {
             steps {
                 script {
@@ -16,10 +19,13 @@ pipeline{
                 }
             }
         }
-        stege(DEPLOY) {
+
+        stage('DEPLOY') {
             steps {
-                sh 'docker compose down || true '
-                sh 'docker compose up -d' 
+                script {
+                    sh 'docker compose down || true'
+                    sh 'docker compose up -d'
+                }
             }
         }
     }
