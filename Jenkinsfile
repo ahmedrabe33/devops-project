@@ -28,14 +28,32 @@ pipeline {
                 }
             }
         }
+
         stage('Health Check') {
-    steps {
-        script {
-            sh 'docker ps --filter name=my-web-container'
-            sh 'curl -I http://localhost:8081'
+            steps {
+                script {
+                    sh 'docker ps --filter name=my-web-container'
+                    sh 'curl -I http://localhost:8081'
+                }
+            }
         }
     }
-}
 
+    // إضافة قسم التنبيهات لربط النتائج بـ Slack
+    post {
+        success {
+            slackSend(
+                channel: '#jenkins-ci', 
+                color: 'good', 
+                message: "✅ *Deployment Successful!* \n*Project:* ${env.JOB_NAME} \n*Build Number:* ${env.BUILD_NUMBER} \n*App URL:* http://localhost:8081"
+            )
+        }
+        failure {
+            slackSend(
+                channel: '#jenkins-ci', 
+                color: 'danger', 
+                message: "❌ *Deployment Failed!* \n*Project:* ${env.JOB_NAME} \n*Build Number:* ${env.BUILD_NUMBER} \n*Check Jenkins Console:* ${env.BUILD_URL}console"
+            )
+        }
     }
 }
